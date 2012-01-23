@@ -1,0 +1,100 @@
+%-----------------------------------------------------------
+% Author: Katherine Morley
+% Contact: km5@sanger.ac.uk
+%---- Document set-up --------------------------------------
+\documentclass[a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amscd}
+\usepackage[tableposition=top]{caption}
+\usepackage{ifthen}
+\usepackage[utf8]{inputenc}
+\usepackage{lscape}
+\usepackage{fullpage}
+\usepackage{booktabs}
+%-----------------------------------------------------------
+
+\begin{document}
+\setkeys{Gin}{width=0.6\textwidth}
+<<setup,echo=FALSE>>=
+# Packages
+require(xtable)
+require(snpQC)
+@
+
+\title{SNP-ARRAY REPORT: Individual and plate checks}
+\maketitle
+
+\subsection*{Individual Quality Control}
+<<process,echo=FALSE>>=
+plink = plink.input(PREFIX)
+info = dataCheck(plink)
+@
+Plot of heterozygosity \emph{versus} call rate is shown in Figure~\ref{fig1}; samples failing the QC thresholds (heterozygosity $\pm 3$ S.D. or call rate $<$ 0.8) are displayed in Table~\ref{tab1}.
+
+\begin{figure}[!h]
+	\centering
+<<fig1,fig=TRUE,eps=FALSE,echo=FALSE,width=6,height=6>>=
+print(info$fig1)
+@
+\caption{Plot showing average heterozygosity versus call rate (log$_{10}$ scale). The red dashed lines indicate the QC thresholds (heterozygosity $\pm 3$ S.D. or call rate $<$ 0.8).  Points are coloured by the plate of the sample.}
+\label{fig1}
+\end{figure}
+
+\begin{table} 
+	\centering
+	\caption{Samples failing QC due to average heterozygosity or call rate.}
+	\label{tab1}
+<<tab1,echo=F,results=tex>>=
+	tab <- as.data.frame(info$tab1)
+	colnames(tab) <- c("Sanger ID","Plate","Well","Call rate","Heterozygosity")
+	tab <- xtable(tab,digits=rep(3,ncol(tab)+1))
+    print(tab, 
+			#sanitize.text.function = function(x){x},
+			floating=FALSE, 
+			hline.after=NULL, 
+			add.to.row=list(pos=list(-1,0, nrow(tab)), 
+			command=c('\\toprule ','\\midrule ','\\bottomrule ')))
+@
+\end{table}
+
+\subsection*{Plate Quality Control}
+Plate characteristics (heterozygosity, individual call rate, and SNP call rate) are shown in Table~\ref{tab2} and Figures~\ref{fig2} and~\ref{fig3}.
+
+\begin{table}[!h] 
+	\centering
+	\caption{Plate characteristics.}
+	\label{tab1}
+<<tab2,echo=F,results=tex>>=
+	tab <- as.data.frame(info$tab2)
+	colnames(tab) <- c("Number of samples","Individual call rate","Individual heterozygosity","SNP call rate")
+	tab <- xtable(tab,digits=rep(3,ncol(tab)+1))
+    print(tab, 
+			#sanitize.text.function = function(x){x},
+			floating=FALSE, 
+			hline.after=NULL, 
+			add.to.row=list(pos=list(-1,0, nrow(tab)), 
+			command=c('\\toprule ','\\midrule ','\\bottomrule ')))
+@
+\end{table}
+
+\begin{figure}[!h]
+	\centering
+<<fig2,fig=TRUE,eps=FALSE,echo=FALSE,width=6,height=6>>=
+print(info$fig2)
+@
+\caption{Boxplot of average heterozygosity by plate.}
+\label{fig2}
+\end{figure}
+
+\begin{figure}[!h]
+	\centering
+<<fig3,fig=TRUE,eps=FALSE,echo=FALSE,width=6,height=6>>=
+print(info$fig3)
+@
+\caption{Boxplot of average individual call rate by plate.}
+\label{fig3}
+\end{figure}
+
+\end{document}
+%-----------------------------------------------------------
+

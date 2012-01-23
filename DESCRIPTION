@@ -1,0 +1,11 @@
+Package: snpQC
+Type: Package
+Title: QC of genotype data from from Illumina SNP-array
+Version: 0.1.1
+Date: 2012-1-21
+Author: Katherine I. Morley
+Maintainer: <km5@sanger.ac.uk>
+Depends: ggplot2, snpStats
+Description: Also requires installation of the C programmes PLINK and KING.
+License: Artistic
+Packaged: 2011-05-03 22:40:54 UTC; km5

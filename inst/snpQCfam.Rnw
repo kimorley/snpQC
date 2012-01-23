@@ -1,0 +1,61 @@
+%-----------------------------------------------------------
+% Author: Katherine Morley
+% Contact: km5@sanger.ac.uk
+%---- Document set-up --------------------------------------
+\documentclass[a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amscd}
+\usepackage[tableposition=top]{caption}
+\usepackage{ifthen}
+\usepackage[utf8]{inputenc}
+\usepackage{lscape}
+\usepackage{fullpage}
+\usepackage{booktabs}
+%-----------------------------------------------------------
+
+\begin{document}
+\setkeys{Gin}{width=0.6\textwidth}
+<<setup,echo=FALSE>>=
+# Packages
+require(xtable)
+require(snpQC)
+@
+
+\title{SNP-ARRAY REPORT: Family check}
+\maketitle
+
+<<process,echo=FALSE>>=
+info = famCheck(FAM)
+@
+
+Kinship ($\phi$) estimates for all family members are shown in Table~\ref{tab1} and plotted against the proportion of SNPs IBS$_0$ in Figure~\ref{fig1} (note that a method of estimation that is robust to population structure and IBS$_0$ will not fall within theoretical expectations, although it should still be close to 0 for parent-offspring pairs).
+
+\begin{table} 
+	\centering
+	\caption{Kinship estimates for family. A parent-parent relationships is indicated by a `1' in the Relationship column; a potential relationship problem is flagged by a `1' in the Error column.}
+	\label{tab1}
+<<tab1,echo=F,results=tex>>=
+	tab <- as.data.frame(info$tab1)
+	colnames(tab) <- c("ID1","ID2","SNPs shared","Kinship","IBD0","Relationship","Error")
+	tab <- xtable(tab,digits=rep(3,ncol(tab)+1))
+    print(tab, 
+			#sanitize.text.function = function(x){x},
+			floating=FALSE, 
+			hline.after=NULL, 
+			add.to.row=list(pos=list(-1,0, nrow(tab)), 
+			command=c('\\toprule ','\\midrule ','\\bottomrule ')))
+@
+\end{table}
+
+\begin{figure}[!h]
+	\centering
+<<fig1,fig=TRUE,eps=FALSE,echo=FALSE,width=6,height=6>>=
+print(info$fig1)
+@
+\caption{Plot kinship estimate for all family pairs.  Parent-offspring relationships are coloured red and should fall within the pink area of the graph; parent-parent relationships are coloured blue and should fall within the blue area of the graph.}
+\label{fig1}
+\end{figure}
+
+\end{document}
+%-----------------------------------------------------------
+

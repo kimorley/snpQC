@@ -1,0 +1,7 @@
+export(
+cmd.input,
+dataCheck,
+famCheck,
+king.input,
+plink.input
+)
