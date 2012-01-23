@@ -21,7 +21,7 @@ require(xtable)
 require(snpQC)
 @
 
-\title{SNP-ARRAY REPORT: Individual and plate checks}
+\title{SNP-ARRAY REPORT: Individual and plate checks \\ \texttt{snpQC version \Sexpr{packageDescription("snpQC",field="Version")}}}
 \maketitle
 
 \subsection*{Individual Quality Control}
@@ -33,14 +33,14 @@ Plot of heterozygosity \emph{versus} call rate is shown in Figure~\ref{fig1}; sa
 
 \begin{figure}[!h]
 	\centering
-<<fig1,fig=TRUE,eps=FALSE,echo=FALSE,width=6,height=6>>=
+<<fig1,fig=TRUE,eps=FALSE,echo=FALSE,width=9,height=6>>=
 print(info$fig1)
 @
 \caption{Plot showing average heterozygosity versus call rate (log$_{10}$ scale). The red dashed lines indicate the QC thresholds (heterozygosity $\pm 3$ S.D. or call rate $<$ 0.8).  Points are coloured by the plate of the sample.}
 \label{fig1}
 \end{figure}
 
-\begin{table} 
+\begin{table}[!h] 
 	\centering
 	\caption{Samples failing QC due to average heterozygosity or call rate.}
 	\label{tab1}
@@ -63,7 +63,7 @@ Plate characteristics (heterozygosity, individual call rate, and SNP call rate) 
 \begin{table}[!h] 
 	\centering
 	\caption{Plate characteristics.}
-	\label{tab1}
+	\label{tab2}
 <<tab2,echo=F,results=tex>>=
 	tab <- as.data.frame(info$tab2)
 	colnames(tab) <- c("Number of samples","Individual call rate","Individual heterozygosity","SNP call rate")

@@ -21,7 +21,7 @@ require(xtable)
 require(snpQC)
 @
 
-\title{SNP-ARRAY REPORT: Family check}
+\title{SNP-ARRAY REPORT: Family check \\ \texttt{snpQC version \Sexpr{packageDescription("snpQC",field="Version")}}}
 \maketitle
 
 <<process,echo=FALSE>>=

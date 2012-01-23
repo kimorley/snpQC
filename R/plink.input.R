@@ -7,8 +7,14 @@
 plink.input <- function(PREFIX){
 	require(snpStats)
 	a = read.plink(paste(PREFIX,"bed",sep="."))
-	info = do.call(rbind,lapply(a$fam$member, function(x){cbind( member = x, id=paste(unlist(strsplit(x,"_"))[length(strsplit(x,"_")[[1]])-1],unlist(strsplit(x,"_"))[length(strsplit(x,"_")[[1]])],sep="_"), plate=unlist(strsplit(x,"_"))[1], well=unlist(strsplit(x,"_"))[2] )} ) )
-	a$info = data.frame(info)
+#	info = do.call(rbind,lapply(a$fam$member, function(x){cbind( member = x, id=paste(unlist(strsplit(x,"_"))[length(strsplit(x,"_")[[1]])-1],unlist(strsplit(x,"_"))[length(strsplit(x,"_")[[1]])],sep="_"), plate=unlist(strsplit(x,"_"))[1], well=unlist(strsplit(x,"_"))[2] )} ) )
+#	This causes recursive errors on LSF so using loop instead:
+	b = lapply(a$fam$member, function(x){cbind( member = x, id=paste(unlist(strsplit(x,"_"))[length(strsplit(x,"_")[[1]])-1],unlist(strsplit(x,"_"))[length(strsplit(x,"_")[[1]])],sep="_"), plate=unlist(strsplit(x,"_"))[1], well=unlist(strsplit(x,"_"))[2] )} )
+	c = data.frame()
+	for (i in 1:length(b)){
+		c = rbind(c,b[[i]])
+	}
+	a$info = c
 	return(a)
 }
 
